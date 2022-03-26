@@ -3417,14 +3417,7 @@ class PlayState extends MusicBeatState
 
 	var danced:Bool = false;
 
-	override function stepHit()
-	{
-		super.stepHit();
-		if (FlxG.sound.music.time > Conductor.songPosition + 20 || FlxG.sound.music.time < Conductor.songPosition - 20)
-		{
-			resyncVocals();
-		}
-
+	
 		#if windows
 		if (executeModchart && luaModchart != null)
 		{
@@ -3449,16 +3442,7 @@ class PlayState extends MusicBeatState
 	var lightningStrikeBeat:Int = 0;
 	var lightningOffset:Int = 8;
 
-	override function beatHit()
-	{
-		super.beatHit();
-		timerr++;
-
-		if (generatedMusic)
-		{
-			notes.sort(FlxSort.byY, (PlayStateChangeables.useDownscroll ? FlxSort.ASCENDING : FlxSort.DESCENDING));
-		}
-
+	
 		#if windows
 		if (executeModchart && luaModchart != null)
 		{
