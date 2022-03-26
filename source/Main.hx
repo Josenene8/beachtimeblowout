@@ -49,8 +49,6 @@ class Main extends Sprite
 		}
 	}
 
-	public static var webmHandler:WebmHandler;
-
 	private function init(?E:Event):Void
 	{
 		if (hasEventListener(Event.ADDED_TO_STAGE))
@@ -75,20 +73,26 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
-		#if cpp
-		initialState = Caching;
-		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
-		#else
-		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
+		#if !debug
+		initialState = TitleState;
 		#end
+
+		#if mobile
+		gameWidth = 1280;
+		gameHeight = 720;
+		zoom = 1;
+		#end
+
+		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
+
 		addChild(game);
-		
-		#if !mobile
+
+		//#if !mobile
 		fpsCounter = new FPS(10, 3, 0xFFFFFF);
 		addChild(fpsCounter);
 		toggleFPS(FlxG.save.data.fps);
 
-		#end
+		//#end
 	}
 
 	var game:FlxGame;
