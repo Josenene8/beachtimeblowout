@@ -63,7 +63,6 @@ import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
-import ui.Mobilecontrols;
 
 #if windows
 import Discord.DiscordClient;
@@ -235,11 +234,7 @@ class PlayState extends MusicBeatState
 	public static var highestCombo:Int = 0;
 
 	private var executeModchart = false;
-	
-        #if mobileC
-	var mcontrols:Mobilecontrols; 
-	#end
-	
+
 	// API stuff
 	
 	public function addObject(object:FlxBasic) { add(object); }
@@ -694,31 +689,7 @@ class PlayState extends MusicBeatState
 		kadeEngineWatermark.cameras = [camHUD];
 		if (loadRep)
 			replayTxt.cameras = [camHUD];
-		
-                #if mobileC
-			mcontrols = new Mobilecontrols();
-			switch (mcontrols.mode)
-			{
-				case VIRTUALPAD_RIGHT | VIRTUALPAD_LEFT | VIRTUALPAD_CUSTOM:
-					controls.setVirtualPad(mcontrols._virtualPad, FULL, NONE);
-				case HITBOX:
-					controls.setHitBox(mcontrols._hitbox);
-				default:
-			}
-			trackedinputs = controls.trackedinputs;
-			controls.trackedinputs = [];
 
-			var camcontrol = new FlxCamera();
-			FlxG.cameras.add(camcontrol);
-			camcontrol.bgColor.alpha = 0;
-			mcontrols.cameras = [camcontrol];
-
-			mcontrols.visible = false;
-
-			add(mcontrols);
-		#end
-			
-		
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
 		// UI_camera.zoom = 1;
@@ -851,13 +822,7 @@ class PlayState extends MusicBeatState
 	#end
 
 	function startCountdown():Void
-	{ 
-		
-		#if mobileC
-		mcontrols.visible = true;
-		#end
-		
-		
+	{
 		inCutscene = false;
 
 		generateStaticArrows(0);
@@ -2383,7 +2348,7 @@ class PlayState extends MusicBeatState
 
 					if (SONG.validScore)
 					{
-						
+						NGio.unlockMedal(60961);
 						Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 					}
 
@@ -3004,7 +2969,8 @@ class PlayState extends MusicBeatState
 					WebmPlayer.SKIP_STEP_LIMIT = 90;
 					var str1:String = "WEBM SHIT"; 
 					webmHandler = new WebmHandler();
-					
+					webmHandler.source(ourSource);
+					webmHandler.makePlayer();
 					webmHandler.webm.name = str1;
 			
 					GlobalVideo.setWebm(webmHandler);
@@ -3024,7 +2990,7 @@ class PlayState extends MusicBeatState
 						GlobalVideo.get().play();
 					}
 					
-				
+					var data = webmHandler.webm.bitmapData;
 			
 					videoSprite = new FlxSprite(-470,-30).loadGraphic(data);
 			
@@ -3041,9 +3007,11 @@ class PlayState extends MusicBeatState
 					trace('poggers');
 			
 					if (!songStarted)
-						
+						webmHandler.pause();
+					else
+						webmHandler.resume();
 					#end
-				
+				}
 
 	function noteMiss(direction:Int = 1, daNote:Note):Void
 	{
@@ -3417,7 +3385,14 @@ class PlayState extends MusicBeatState
 
 	var danced:Bool = false;
 
-	
+	override function stepHit()
+	{
+		super.stepHit();
+		if (FlxG.sound.music.time > Conductor.songPosition + 20 || FlxG.sound.music.time < Conductor.songPosition - 20)
+		{
+			resyncVocals();
+		}
+
 		#if windows
 		if (executeModchart && luaModchart != null)
 		{
@@ -3442,7 +3417,16 @@ class PlayState extends MusicBeatState
 	var lightningStrikeBeat:Int = 0;
 	var lightningOffset:Int = 8;
 
-	
+	override function beatHit()
+	{
+		super.beatHit();
+		timerr++;
+
+		if (generatedMusic)
+		{
+			notes.sort(FlxSort.byY, (PlayStateChangeables.useDownscroll ? FlxSort.ASCENDING : FlxSort.DESCENDING));
+		}
+
 		#if windows
 		if (executeModchart && luaModchart != null)
 		{
