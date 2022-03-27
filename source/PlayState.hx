@@ -815,7 +815,7 @@ class PlayState extends MusicBeatState
 						stageFront.active = false;
 						stageFront.alpha = 0.93;
 						//add(stageFront);
-						people = new FlxSprite(-600, -250).loadGraphic(Paths.image('people', 'beachtime'));
+						var people:FlxSprite = new FlxSprite(-600, -250).loadGraphic(Paths.image('people', 'beachtime'));
 						people.setGraphicSize(Std.int(people.width * 1.1));
 						people.antialiasing = true;
 						people.scrollFactor.set(0.9, 0.9);
