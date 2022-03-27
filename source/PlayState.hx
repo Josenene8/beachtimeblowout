@@ -728,7 +728,7 @@ class PlayState extends MusicBeatState
 						stageFront.active = false;
 						add(stageFront);
 						stageFront.angle = 0.2;
-						FlxTween.tween(stageFront
+						FlxTween.tween(stageFront, {angle: -0.2}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
 				}
 			default:
 			{
