@@ -80,8 +80,15 @@ class PlayState extends MusicBeatState
 	public static var bads:Int = 0;
 	public static var goods:Int = 0;
 	public static var sicks:Int = 0;
-
+	
+        public static var trail:FlxTrail;
+	public static var timerr:Int = 0;	
+	public static var beachballl:Bool = false;
+	public static var beachballll:Bool = false;
+	public static var beatone:Int = 208;
+	
 	public static var songPosBG:FlxSprite;
+	public static var beachball:FlxSprite;
 	public static var songPosBar:FlxBar;
 
 	public static var rep:Replay;
@@ -701,6 +708,28 @@ class PlayState extends MusicBeatState
 	
 						add(stageCurtains);
 				}
+			case 'beach':
+				{
+						defaultCamZoom = 0.7;
+						curStage = 'beach';
+
+						var bg:FlxSprite = new FlxSprite(-850, -200).loadGraphic(Paths.image('beach', 'beachtime'));
+						bg.setGraphicSize(Std.int(bg.width * 1.3));
+						bg.antialiasing = true;
+						bg.scrollFactor.set(0.9, 0.9);
+						bg.active = false;
+						add(bg);
+
+						var stageFront:FlxSprite = new FlxSprite(-800, -500).loadGraphic(Paths.image('backwater', 'beachtime'));
+						stageFront.setGraphicSize(Std.int(stageFront.width * 1.3));
+						stageFront.updateHitbox();
+						stageFront.antialiasing = true;
+						stageFront.scrollFactor.set(0.9, 0.9);
+						stageFront.active = false;
+						add(stageFront);
+						stageFront.angle = 0.2;
+						FlxTween.tween(stageFront
+				}
 			default:
 			{
 					defaultCamZoom = 0.9;
@@ -760,7 +789,10 @@ class PlayState extends MusicBeatState
 					camPos.x += 600;
 					tweenCamIn();
 				}
-
+				
+                        case 'dad' | 'katelyn':
+				camPos.y += 400;
+				FlxTween.tween(dad, {y: dad.y + 15}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
 			case "spooky":
 				dad.y += 200;
 			case "monster":
@@ -792,53 +824,50 @@ class PlayState extends MusicBeatState
 		
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
 
-		// REPOSITIONING PER STAGE
-		switch (curStage)
+		if (!PlayStateChangeables.Optimize)
 		{
-			case 'limo':
-				boyfriend.y -= 220;
-				boyfriend.x += 260;
 				if(FlxG.save.data.distractions){
-					resetFastCar();
-					add(fastCar);
-				}
-
-			case 'mall':
-				boyfriend.x += 200;
-
-			case 'mallEvil':
-				boyfriend.x += 320;
-				dad.y -= 80;
-			case 'school':
-				boyfriend.x += 200;
-				boyfriend.y += 220;
-				gf.x += 180;
-				gf.y += 300;
-			case 'schoolEvil':
-				if(FlxG.save.data.distractions){
-				// trailArea.scrollFactor.set();
-				var evilTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069);
-				// evilTrail.changeValuesEnabled(false, false, false, false);
-				// evilTrail.changeGraphic()
-				add(evilTrail);
-				// evilTrail.scrollFactor.set(1.1, 1.1);
-				}
-
-
-				boyfriend.x += 200;
-				boyfriend.y += 220;
-				gf.x += 180;
-				gf.y += 300;
+				camHUD.angle = 0.5;
+			FlxTween.tween(camHUD, {angle: -0.5}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
+			}
+						var stageFront:FlxSprite = new FlxSprite(-800, -185).loadGraphic(Paths.image('water', 'beachtime'));
+						stageFront.setGraphicSize(Std.int(stageFront.width * 1.3));
+						stageFront.updateHitbox();
+						stageFront.antialiasing = true;
+						stageFront.scrollFactor.set(0.9, 0.9);
+						stageFront.active = false;
+						stageFront.alpha = 0.93;
+						//add(stageFront);
+						people = new FlxSprite(-600, -250).loadGraphic(Paths.image('people', 'beachtime'));
+						people.setGraphicSize(Std.int(people.width * 1.1));
+						people.antialiasing = true;
+						people.scrollFactor.set(0.9, 0.9);
+						people.active = false;
+						add(people);
+						add(dad);
+                                                var stageFrontw:FlxSprite = new FlxSprite(-800, -715).loadGraphic(Paths.image('frontwater', 'beachtime'));
+						stageFrontw.setGraphicSize(Std.int(stageFrontw.width * 1.3));
+						stageFrontw.updateHitbox();
+						stageFrontw.antialiasing = true;
+						stageFrontw.scrollFactor.set(0.9, 0.9);
+						stageFrontw.active = false;
+						stageFrontw.alpha = 0.93;
+						add(stageFrontw);
+						stageFrontw.angle = -0.2;
+						FlxTween.tween(stageFrontw, {angle: 0.2}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
+						var stageCurtains:FlxSprite = new FlxSprite(-800, -500).loadGraphic(Paths.image('dock', 'beachtime'));
+						stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 1.1));
+						stageCurtains.updateHitbox();
+						stageCurtains.antialiasing = true;
+						stageCurtains.scrollFactor.set(0.9, 0.9);
+						stageCurtains.active = false;
+	
+						add(stageCurtains);
+			add(gf);
+			add(boyfriend);
 		}
 
-		add(gf);
-
-		// Shitty layering but whatev it works LOL
-		if (curStage == 'limo')
-			add(limo);
-
-		add(dad);
-		add(boyfriend);
+                
 		if (loadRep)
 		{
 			FlxG.watch.addQuick('rep rpesses',repPresses);
@@ -849,6 +878,10 @@ class PlayState extends MusicBeatState
 			FlxG.save.data.downscroll = rep.replay.isDownscroll;
 			// FlxG.watch.addQuick('Queued',inputsQueued);
 		}
+
+                trace('uh ' + PlayStateChangeables.safeFrames);
+
+		trace("SF CALC: " + Math.floor((PlayStateChangeables.safeFrames / 60) * 1000));
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
 		// doof.x += 70;
@@ -1037,40 +1070,7 @@ class PlayState extends MusicBeatState
 		{
 			switch (StringTools.replace(curSong," ", "-").toLowerCase())
 			{
-				case "winter-horrorland":
-					var blackScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
-					add(blackScreen);
-					blackScreen.scrollFactor.set();
-					camHUD.visible = false;
-
-					new FlxTimer().start(0.1, function(tmr:FlxTimer)
-					{
-						remove(blackScreen);
-						FlxG.sound.play(Paths.sound('Lights_Turn_On'));
-						camFollow.y = -2050;
-						camFollow.x += 200;
-						FlxG.camera.focusOn(camFollow.getPosition());
-						FlxG.camera.zoom = 1.5;
-
-						new FlxTimer().start(0.8, function(tmr:FlxTimer)
-						{
-							camHUD.visible = true;
-							remove(blackScreen);
-							FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, {
-								ease: FlxEase.quadInOut,
-								onComplete: function(twn:FlxTween)
-								{
-									startCountdown();
-								}
-							});
-						});
-					});
-				case 'senpai':
-					schoolIntro(doof);
-				case 'roses':
-					FlxG.sound.play(Paths.sound('ANGRY'));
-					schoolIntro(doof);
-				case 'thorns':
+				case 'foreshore':
 					schoolIntro(doof);
 				default:
 					startCountdown();
@@ -1080,10 +1080,13 @@ class PlayState extends MusicBeatState
 		{
 			switch (curSong.toLowerCase())
 			{
+				case 'foreshore':
+					schoolIntro(doof);
 				default:
 					startCountdown();
 			}
 		}
+
 
 		if (!loadRep)
 			rep = new Replay("na");
@@ -3394,6 +3397,30 @@ class PlayState extends MusicBeatState
 				}
 		}
 
+	}
+        function beachballCreate():Void
+	{
+			var timer:Int = 0;
+			var height:Int = 30;
+			var beachball:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('beachball', 'beachtime'));
+			beachball.setGraphicSize(Std.int(beachball.width * 1.1));
+			beachball.updateHitbox();
+			beachball.antialiasing = true;
+			beachball.scrollFactor.set(0.9, 0.9);
+			beachball.active = false;
+			add(beachball);
+			beachball.cameras = [camHUD];
+			beachballl = true;
+			beachball.screenCenter();
+			beachball.x -= 500;
+			beachballll = true;
+			beachball.y = beachball.y + FlxG.random.int(-200,200);
+			FlxTween.tween(beachball, {x: beachball.x + 1000}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
+			FlxTween.tween(beachball, {y: beachball.y + FlxG.random.int(-500,0)}, 1.2, {ease: FlxEase.quadInOut, type: PINGPONG});
+			new FlxTimer().start(8, function(tmr:FlxTimer)
+			{ 
+				remove(beachball);
+			});
 	}
 
 	function trainReset():Void
