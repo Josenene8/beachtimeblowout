@@ -28,11 +28,8 @@ class E extends MusicBeatState
 	private var colorRotation:Int = 1;
 
 	override function create()
-	{   
-		#if mobileC
-		addVirtualPad(A_B);
-		#end
-			
+	{        	
+	
 		super.create();
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('week54prototype', 'shared'));
 		bg.scale.x *= 1.55;
@@ -91,7 +88,13 @@ class E extends MusicBeatState
 			else FlxTween.tween(kadeLogo, {alpha: 0.8}, 0.8, {ease: FlxEase.quartInOut});
 		}, 0);
 	}
-
+	
+        #if mobileC
+	addVirtualPad(FULL, A_B);
+	#end
+		
+	super.create();
+	
 	override function update(elapsed:Float)
 	{
 		if (controls.ACCEPT)
