@@ -801,7 +801,7 @@ class PlayState extends MusicBeatState
 
 
 		
-		boyfriend = new Boyfriend(770, 450, SONG.player1);
+		boyfriend = new Boyfriend(770, 100, SONG.player1);
 
 		if (!PlayStateChangeables.Optimize)
 		{
