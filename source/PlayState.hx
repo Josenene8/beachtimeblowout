@@ -355,6 +355,8 @@ class PlayState extends MusicBeatState
 				dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogue'));
 			case 'thorns':
 				dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
+                        case 'foreshore':
+				dialogue = CoolUtil.coolTextFile(Paths.txt('foreshore/dialog'));
 		}
 
 		switch(SONG.stage)
@@ -3478,13 +3480,77 @@ class PlayState extends MusicBeatState
 			luaModchart.executeState('beatHit',[curBeat]);
 		}
 		#end
-
-		if (curSong == 'Tutorial' && dad.curCharacter == 'gf') {
-			if (curBeat % 2 == 1 && dad.animOffsets.exists('danceLeft'))
-				dad.playAnim('danceLeft');
-			if (curBeat % 2 == 0 && dad.animOffsets.exists('danceRight'))
-				dad.playAnim('danceRight');
+          if (curSong == 'Foreshore'){
+		if(FlxG.save.data.distractions){
+			switch(curStep){
+				case 25:
+					beachballCreate();
+					beachballCreate();
+				case 50:
+					beachballCreate();
+				case 75:
+					beachballCreate();
+				case 100:
+					beachballCreate();
+					beachballCreate();
+				case 125:
+					beachballCreate();
+				case 150:
+					beachballCreate();
+				case 175:
+					beachballCreate();
+					beachballCreate();
+				case 200:
+					beachballCreate();
+					beachballCreate();
+					beachballCreate();
+					beachballCreate();
+				case 225:
+					beachballCreate();
+					beachballCreate();
+					beachballCreate();
+					beachballCreate();
+				case 250:
+					beachballCreate();
+				case 275:
+					beachballCreate();
+				case 300:
+					beachballCreate();
+					beachballCreate();
+				case 325:
+					beachballCreate();
+				case 350:
+					beachballCreate();
+					beachballCreate();
+				case 375:
+					beachballCreate();
+				case 400:
+					beachballCreate();
+					beachballCreate();
+				case 425:
+					beachballCreate();
+				case 450:
+					beachballCreate();
+					beachballCreate();
+				case 475:
+					beachballCreate();
+				case 500:
+					beachballCreate();
+					beachballCreate();
+				case 525:
+					beachballCreate();
+				case 550:
+					beachballCreate();
+					beachballCreate();
+				case 575:
+					beachballCreate();
+				case 600:
+					beachballCreate();
+					beachballCreate();
+			}
 		}
+	}
+
 
 		if (SONG.notes[Math.floor(curStep / 16)] != null)
 		{
