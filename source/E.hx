@@ -28,7 +28,11 @@ class E extends MusicBeatState
 	private var colorRotation:Int = 1;
 
 	override function create()
-	{
+	{   
+		#if mobileC
+		addVirtualPad(A_B);
+		#end
+			
 		super.create();
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('week54prototype', 'shared'));
 		bg.scale.x *= 1.55;
